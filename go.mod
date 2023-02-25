@@ -20,7 +20,7 @@ require (
 	github.com/pelletier/go-toml v1.7.0
 	github.com/rubiojr/go-vhd v0.0.0-20200706105327-02e210299021
 	github.com/stretchr/testify v1.6.1
-	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b
+	golang.org/x/net v0.7.0
 	google.golang.org/grpc v1.28.0
 	k8s.io/api v0.20.0
 	k8s.io/apimachinery v0.20.0
