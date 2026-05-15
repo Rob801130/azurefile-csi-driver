@@ -79,8 +79,8 @@ github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/azsecrets
 # github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal v1.2.0
 ## explicit; go 1.23.0
 github.com/Azure/azure-sdk-for-go/sdk/security/keyvault/internal
-# github.com/Azure/azure-sdk-for-go/sdk/storage/azfile v1.5.4
-## explicit; go 1.24.0
+# github.com/Azure/azure-sdk-for-go/sdk/storage/azfile v1.6.0
+## explicit; go 1.25.0
 github.com/Azure/azure-sdk-for-go/sdk/storage/azfile/directory
 github.com/Azure/azure-sdk-for-go/sdk/storage/azfile/file
 github.com/Azure/azure-sdk-for-go/sdk/storage/azfile/fileerror
@@ -96,7 +96,7 @@ github.com/Azure/azure-sdk-for-go/sdk/storage/azfile/share
 github.com/Azure/msi-dataplane/pkg/dataplane
 github.com/Azure/msi-dataplane/pkg/dataplane/internal/challenge
 github.com/Azure/msi-dataplane/pkg/dataplane/internal/client
-# github.com/AzureAD/microsoft-authentication-library-for-go v1.6.0
+# github.com/AzureAD/microsoft-authentication-library-for-go v1.7.2
 ## explicit; go 1.18
 github.com/AzureAD/microsoft-authentication-library-for-go/apps/cache
 github.com/AzureAD/microsoft-authentication-library-for-go/apps/confidential
@@ -205,7 +205,7 @@ github.com/go-openapi/swag
 # github.com/go-task/slim-sprig/v3 v3.0.0
 ## explicit; go 1.20
 github.com/go-task/slim-sprig/v3
-# github.com/golang-jwt/jwt/v5 v5.3.0
+# github.com/golang-jwt/jwt/v5 v5.3.1
 ## explicit; go 1.21
 github.com/golang-jwt/jwt/v5
 # github.com/golang/protobuf v1.5.4
