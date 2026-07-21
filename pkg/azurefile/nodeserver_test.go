@@ -308,6 +308,25 @@ func TestNodePublishVolume(t *testing.T) {
 			expectedErr: testutil.TestError{},
 		},
 		{
+			desc: "[Error] Republish for mountWithWIToken already mounted should still refresh credentials (do not skip NodeStageVolume)",
+			req: &csi.NodePublishVolumeRequest{VolumeCapability: &csi.VolumeCapability{AccessMode: &volumeCap},
+				VolumeId:          "csi-witoken-republish-already-mounted",
+				TargetPath:        alreadyMountedTarget,
+				StagingTargetPath: sourceTest,
+				Readonly:          true,
+				VolumeContext: map[string]string{
+					storageAccountField:      "teststorageaccount",
+					shareNameField:           "testshare",
+					mountWithWITokenField:    "true",
+					serviceAccountTokenField: "fake-token",
+				},
+			},
+			expectedErr: testutil.TestError{
+				DefaultError: status.Errorf(codes.InvalidArgument, "GetAccountInfo(csi-witoken-republish-already-mounted) failed with error: clientID is empty for workload identity auth"),
+				WindowsError: status.Errorf(codes.InvalidArgument, "GetAccountInfo(csi-witoken-republish-already-mounted) failed with error: clientID is empty for workload identity auth"),
+			},
+		},
+		{
 			desc: "[Success] Regular volume mounting with mountWithManagedIdentity should succeed",
 			req: &csi.NodePublishVolumeRequest{VolumeCapability: &csi.VolumeCapability{AccessMode: &volumeCap},
 				VolumeId:          "vol_1",

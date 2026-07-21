@@ -72,10 +72,50 @@ func (f *fakeMounter) IsMountPoint(file string) (bool, error) {
 	return !notMnt, nil
 }
 
+// fakeMounterWrapper wraps a real mount.Interface (e.g. the Windows csi-proxy
+// or host-process mounter) and intercepts IsLikelyNotMountPoint/IsMountPoint
+// for the well-known test path markers used across the unit tests
+// ("error_is_likely" and "false_is_likely"), matching the semantics of
+// fakeMounter on Linux. All other methods pass through to the wrapped
+// implementation.
+type fakeMounterWrapper struct {
+	mount.Interface
+}
+
+// IsLikelyNotMountPoint mirrors fakeMounter.IsLikelyNotMountPoint on Linux so
+// tests that rely on these path markers behave the same on Windows.
+func (w *fakeMounterWrapper) IsLikelyNotMountPoint(file string) (bool, error) {
+	if strings.Contains(file, "error_is_likely") {
+		return false, fmt.Errorf("fake IsLikelyNotMountPoint: fake error")
+	}
+	if strings.Contains(file, "false_is_likely") {
+		return false, nil
+	}
+	return w.Interface.IsLikelyNotMountPoint(file)
+}
+
+// IsMountPoint mirrors fakeMounter.IsMountPoint so it stays consistent with
+// the overridden IsLikelyNotMountPoint above (the real Windows mounter's
+// IsMountPoint calls its own IsLikelyNotMountPoint, bypassing this wrapper).
+func (w *fakeMounterWrapper) IsMountPoint(file string) (bool, error) {
+	notMnt, err := w.IsLikelyNotMountPoint(file)
+	if err != nil {
+		return false, err
+	}
+	return !notMnt, nil
+}
+
 // NewFakeMounter fake mounter
 func NewFakeMounter() (*mount.SafeFormatAndMount, error) {
 	if runtime.GOOS == "windows" {
-		return mounter.NewSafeMounter(true, true)
+		m, err := mounter.NewSafeMounter(true, true)
+		if err != nil {
+			return nil, err
+		}
+		// Wrap the real Windows mounter so tests can use the "false_is_likely"
+		// / "error_is_likely" path markers the same way they do on Linux.
+		m.Interface = &fakeMounterWrapper{Interface: m.Interface}
+		return m, nil
 	}
 	return &mount.SafeFormatAndMount{
 		Interface: &fakeMounter{},
